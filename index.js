@@ -79,7 +79,7 @@ async function scrapePosterImageUrl(movies) {
                     .attr('src')
                 )
             movies[i].posterImageUrl = posterImageUrl
-            savePosterImageToDisk(movies[i])
+            await savePosterImageToDisk(movies[i])
             console.log(movies[i])
         } catch (err) {
             console.log(err)
@@ -89,9 +89,13 @@ async function scrapePosterImageUrl(movies) {
 }
 
 async function savePosterImageToDisk(movie) {
-    regularRequest
-        .get(movie.posterImageUrl)
-        .pipe(fs.createWriteStream(`posters/${movie.rank}.png`))
+    try {
+        regularRequest
+            .get(movie.posterImageUrl)
+            .pipe(fs.createWriteStream(`posters/${movie.rank}.png`))
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 main()
